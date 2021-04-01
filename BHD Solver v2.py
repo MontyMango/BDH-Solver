@@ -27,72 +27,76 @@ class Solver :
         # used for options (Default settings)
         self.strip = 1  # strips 0x and 0b on Hex and Binary problems
         self.binary255 = 0  # expands binary to 255 if problem is under 255
-        self.tempstrip = self.strip  # temp string for setting
-        self.tempbinary255 = self.binary255  # temp string for setting
+        self.filefor = []
         # open to settings file to save settings
-        try:
+        try :
             self.r = open('settings.txt', 'r')  # reads settings
-        except FileNotFoundError:
-            open('settings.txt','x')    # creates settings.txt file if doesn't exist
+        except FileNotFoundError :
+            open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
+
+        # setup if and for loops, will be tested later
+        # self.ifstripped = [self.strip if "0=1" in self.filefor == 1 else 0]
+        # self.ifbinary255 = [self.binary255 if "1=1" in self.filefor == 1 else 0]
 
     def setup(self) :
-        print(self.r.readline())
-        if "strip" in self.r.readline() :    # Stripped
+        with open('settings.txt','r') as file:  # opens file for reading
+            self.filefor = file.read()      # reads file
+        if "0=1" in self.filefor :  # Stripped
             self.strip = 1
-        else:
+        else :
             self.strip = 0
-        if "binary255" in self.r.readline() :    # Binary to 255
+        if "1=1" in self.filefor :  # Binary to 255
             self.binary255 = 1
-        else:
+        else :
             self.binary255 = 0
         self.r.close()
         self.menu()
 
     def Options(self) :
         print("\n\nAnything you want changed?\n")
-        if self.tempstrip == 0 :
-            print("1. Turn striping on (0x, 0b)")
+        if self.strip == 0 :
+            print("1. Turn striping on (0X, 0b)")
         else :
-            print("1. Turn striping off (0x, 0b)")
-        if self.tempbinary255 == 1 :
-            print("2. Don't limit binary to 255 when it's less than 255 (01100000)\n")
+            print("1. Turn striping off (0X, 0b)")
+        if self.binary255 == 1 :
+            print("2. (doesn't work right now) Don't limit binary to 255 when it's less than 255 (_1100000)\n")
         else :
-            print("2. Limit binary to 255 when it's less than 255 (01100000)\n")
+            print("2. (doesn't work right now) Limit binary to 255 when it's less than 255 (01100000)\n")
         print("0. Save and exit\n")
 
         try :
             inp = int(input("Option#"))
             if inp == 1 :
-                if self.tempstrip == 1 :
-                    self.tempstrip = 0
-                else:
-                    self.tempstrip = 1
+                if self.strip == 1 :
+                    self.strip = 0
+                else :
+                    self.strip = 1
                 self.Options()
             elif inp == 2 :
-                if self.tempbinary255 == 1 :
-                    self.tempbinary255 = 0
+                if self.binary255 == 1 :
+                    self.binary255 = 0
                 else :
-                    self.tempbinary255 = 1
+                    self.binary255 = 1
                 self.Options()
             elif inp == 0 :
                 self.w = open('settings.txt', 'w')  # writes settings
                 self.am = open('settings.txt', 'a')  # appends settings
-                if self.tempstrip == 1 :
-                    self.w.write("strip ")
-                elif self.tempstrip == 0:
-                    self.w.write(' ')
-                if self.tempbinary255 == 1:
-                    self.am.write("binary255")
-                elif self.tempbinary255 == 0:
-                    self.am.write('')
+                if self.strip == 1 :
+                    self.w.write("0=1 ")
+                elif self.strip == 0 :
+                    self.w.write('0=0 ')
+                if self.binary255 == 1 :
+                    self.am.write("1=1")
+                elif self.binary255 == 0 :
+                    self.am.write('1=0')
                     self.w.close()
                     self.am.close()
                 print("Welcome, what would you like solved today?\n\n",
                       "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
                 self.menu()
-            else:
+            else :
                 print("Put in a correct number please"), self.Options()
-        except:
+        except :
             print("This only accepts numbers")
             self.Options()
 
@@ -122,13 +126,13 @@ class Solver :
                     self.menu()
             elif self.pick == 9 :
                 self.Options()
-            elif self.pick == 0:
+            elif self.pick == 0 :
                 print("\n\nArrigato mr. program user and goodbye...")
             else :
                 print("Please select another number...")
                 self.menu()
 
-        except:
+        except :
             print("I am sorry sir, what was that?")
             self.menu()
 
