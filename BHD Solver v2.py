@@ -53,16 +53,16 @@ class Solver :
         self.menu()
 
     def Options(self) :
-        print("\n\nAnything you want changed?\n")
+        print("\n\nAnything you want changed?\n(Be sure to exit to save your settings)\n\n")
         if self.strip == 0 :
             print("1. Turn striping on (0X, 0b)")
         else :
             print("1. Turn striping off (0X, 0b)")
         if self.binary255 == 1 :
-            print("2. (doesn't work right now) Don't limit binary to 255 when it's less than 255 (_1100000)\n")
+            print("2. Don't add extra zeroes when binary's less than 255 (_1100000)\n")
         else :
-            print("2. (doesn't work right now) Limit binary to 255 when it's less than 255 (01100000)\n")
-        print("0. Save and exit\n")
+            print("2. Add extra zeroes to binary when it's less than 255 (01100000)\n")
+        print("0. Exit\n")
 
         try :
             inp = int(input("Option#"))
@@ -127,7 +127,7 @@ class Solver :
             elif self.pick == 9 :
                 self.Options()
             elif self.pick == 0 :
-                print("\n\nArrigato mr. program user and goodbye...")
+                self.Exit()
             else :
                 print("Please select another number...")
                 self.menu()
@@ -180,9 +180,15 @@ class Solver :
 
         try :  # binary
             self.b = int(self.a, self.path)
-            self.b = bin(self.b)
-            if self.strip == 1 :
-                self.b = self.b.lstrip("0b")
+            if self.binary255 == 1:
+                if self.strip == 1:
+                    self.b = format(self.b,'08b')
+                else:
+                    self.b = format(self.b,'#08b')
+            else:
+                self.b = bin(self.b)
+                if self.strip == 1:
+                    self.b = self.b.lstrip("0b")
         except ValueError :
             self.b = "Invalid number"
             self.p1 = 1
@@ -204,14 +210,18 @@ class Solver :
     def Continue(self) :
         self.answer = input("\nWould you like to solve another problem?\ny or n\n")
         if self.answer == 'y' :
-            print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n")
+            print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
             self.menu()
         elif self.answer == 'n' :
-            print("\n\nArrigato mr. program user and goodbye...")
+            self.Exit()
         else :
             print("\n\nlet me repeat myself...\n\n")
             sleep(1)
             self.Continue()
+
+    def Exit(self):
+        print("\n\n\n\n\nArrigato mr. program user and goodbye...")
+        self.r.close()
 
 
 S = Solver()
