@@ -222,6 +222,7 @@ class Solver :
     def Exit(self):
         print("\n\n\n\n\nArrigato mr. program user and goodbye...")
         self.r.close()
+        sleep(3)
 
 
 S = Solver()
