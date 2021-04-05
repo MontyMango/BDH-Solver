@@ -102,7 +102,7 @@ class Solver :
 
     def menu(self) :
         try :
-            self.pick = int(input("Option #"))
+            self.pick = int(input("\nOption #"))
             if self.pick == 1 :
                 try :
                     self.a1 = input("Decimal number: ")
@@ -208,7 +208,7 @@ class Solver :
         self.Continue()
 
     def Continue(self) :
-        self.answer = input("\nWould you like to solve another problem?\ny or n\n")
+        self.answer = input("\nWould you like to solve another problem?\n[y or n]\n>")
         if self.answer == 'y' :
             print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
             self.menu()
