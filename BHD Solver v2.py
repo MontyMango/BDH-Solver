@@ -34,10 +34,6 @@ class Solver :
         except FileNotFoundError :
             open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
 
-        # setup if and for loops, will be tested later
-        # self.ifstripped = [self.strip if "0=1" in self.filefor == 1 else 0]
-        # self.ifbinary255 = [self.binary255 if "1=1" in self.filefor == 1 else 0]
-
     def setup(self) :
         with open('settings.txt','r') as file:  # opens file for reading
             self.filefor = file.read()      # reads file
@@ -102,7 +98,7 @@ class Solver :
 
     def menu(self) :
         try :
-            self.pick = int(input("Option #"))
+            self.pick = int(input("\nOption #"))
             if self.pick == 1 :
                 try :
                     self.a1 = input("Decimal number: ")
@@ -208,7 +204,7 @@ class Solver :
         self.Continue()
 
     def Continue(self) :
-        self.answer = input("\nWould you like to solve another problem?\ny or n\n")
+        self.answer = input("\nWould you like to solve another problem?\n[y or n]\n>")
         if self.answer == 'y' :
             print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
             self.menu()
