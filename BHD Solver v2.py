@@ -34,10 +34,6 @@ class Solver :
         except FileNotFoundError :
             open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
 
-        # setup if and for loops, will be tested later
-        # self.ifstripped = [self.strip if "0=1" in self.filefor == 1 else 0]
-        # self.ifbinary255 = [self.binary255 if "1=1" in self.filefor == 1 else 0]
-
     def setup(self) :
         with open('settings.txt','r') as file:  # opens file for reading
             self.filefor = file.read()      # reads file
