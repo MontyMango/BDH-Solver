@@ -3,8 +3,6 @@ from time import sleep
 
 class Solver :
     def __init__(self) :
-        print("Welcome, what would you like solved today?\n\n",
-              "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
         # used for menu & self.a is used for DecimalSolve too
         self.pick = 0
         # used for answers
@@ -25,28 +23,42 @@ class Solver :
         self.p1 = 0  # An invalid number
         self.p2 = 0  # A serious error occurred
         # used for options (Default settings)
-        self.strip = 1  # strips 0x and 0b on Hex and Binary problems
+        self.strip = 1      # strips 0x and 0b on Hex and Binary problems
         self.binary255 = 0  # expands binary to 255 if problem is under 255
-        self.filefor = []
+
+        self.filefor = []   # settings.txt document to this list
         # open to settings file to save settings
         try :
             self.r = open('settings.txt', 'r')  # reads settings
         except FileNotFoundError :
+            print("\'settings.txt\' file wasn't found with the py program. Creating a blank page...\n\n\n")
+            sleep(2)
             open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
+            self.r = open('settings.txt','r')   # opens and reads a blank settings page
+        print("Welcome, what would you like solved today?\n\n",
+              "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
 
     def setup(self) :
-        with open('settings.txt','r') as file:  # opens file for reading
-            self.filefor = file.read()      # reads file
-        if "0=1" in self.filefor :  # Stripped
-            self.strip = 1
-        else :
-            self.strip = 0
-        if "1=1" in self.filefor :  # Binary to 255
-            self.binary255 = 1
-        else :
-            self.binary255 = 0
-        self.r.close()
-        self.menu()
+        try:
+            with open('settings.txt','r') as file:  # opens file for reading
+                self.filefor = file.read()      # reads file
+
+            if "0=1" in self.filefor :  # Stripped
+                self.strip = 1
+            else :
+                self.strip = 0
+
+            if "1=1" in self.filefor :  # Binary to 255
+                self.binary255 = 1
+            else :
+                self.binary255 = 0
+
+
+            self.r.close()
+            self.menu()
+        except:
+            print("Resulting to default settings. settings.txt failed to be created.")
+            self.menu()
 
     def Options(self) :
         print("\n\nAnything you want changed?\n(Be sure to exit to save your settings)\n\n")
@@ -129,7 +141,7 @@ class Solver :
                 self.menu()
 
         except :
-            print("I am sorry sir, what was that?")
+            print("I am sorry, what was that?")
             self.menu()
 
     def DecimalSolve(self) :
@@ -204,11 +216,17 @@ class Solver :
         self.Continue()
 
     def Continue(self) :
+        print("\nWould you like to solve another problem?\n")
+        print("[y or n]\n")
+        self.answer = input(">")
+        if self.answer == 'y':
+            print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal"
+                  "\n 3. Binary\n 9. Options\n 0. Exit")
         self.answer = input("\nWould you like to solve another problem?\n[y or n]\n>")
         if self.answer == 'y' :
             print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
             self.menu()
-        elif self.answer == 'n' :
+        elif self.answer == 'n':
             self.Exit()
         else :
             print("\n\nlet me repeat myself...\n\n")
@@ -216,7 +234,7 @@ class Solver :
             self.Continue()
 
     def Exit(self):
-        print("\n\n\n\n\nArrigato mr. program user and goodbye...")
+        print("\n\n\n\n\nThank you for using BHD Solver and goodbye...")
         self.r.close()
         sleep(3)
 
