@@ -208,7 +208,7 @@ class Solver :
             self.h = int(self.a, self.path)
             self.h = hex(self.h)
             if self.strip == 1 :
-                self.h = self.h.strip('0x')
+                self.h = self.h.lstrip('0x')
             self.h = self.h.upper()
         except ValueError :
             self.h = "Invalid number"
