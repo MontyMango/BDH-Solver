@@ -5,39 +5,55 @@ class Solver :
     def __init__(self) :
         # used for menu & self.a is used for DecimalSolve too
         self.pick = 0
+
         # used for answers
         self.a1 = 0
         self.a2 = 0
         self.a3 = 0
+
         # used for DecimalSolve answers
         self.d = 0
         self.h = 0
         self.b = 0
+
         # used for DecimalSolve paths
         self.dec = 10
         self.hexa = 16
         self.bina = 2
+
         # used for problem in DecimalSolve
         self.path = 0
+
         # used for DecimalSolve for advanced problems
         self.p1 = 0  # An invalid number
         self.p2 = 0  # A serious error occurred
+
         # used for options (Default settings)
         self.strip = 1      # strips 0x and 0b on Hex and Binary problems
         self.binary255 = 0  # expands binary to 255 if problem is under 255
         self.yor1 = 0       # y or n at the end == 0, or 1 or 2 at the end == 1
-
+        self.disabled = 0   # if settings.txt cannot be found.
         self.filefor = []   # settings.txt document to this list
+
+
         # open to settings file to save settings
         try :
             self.r = open('settings.txt', 'r')  # reads settings
         except FileNotFoundError :
-            print("\'settings.txt\' file wasn't found with the py program. Creating a blank page...\n\n\n")
-            sleep(2)
-            open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
-            self.r = open('settings.txt','r')   # opens and reads a blank settings page
-        print("Welcome, what would you like solved today?\n\n",
-              "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
+            print("\'settings.txt\' file wasn't found with the py program...\nDid you want to create"
+                  " a new document? [y or n]")
+            i = input(">")
+            if i == "y":
+                open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
+                self.r = open('settings.txt','r')   # opens and reads a blank settings page
+            else:
+                print("\n! - Didn't create \'settings.txt\'. Settings will be disabled,")
+                sleep(2)
+                self.disabled = 1
+
+        if self.disabled == 0:
+            print("Welcome, what would you like solved today?\n\n",
+                  "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
 
         # setup if and for loops, will be tested later
         # self.ifstripped = [self.strip if "0=1" in self.filefor == 1 else 0]
@@ -46,6 +62,11 @@ class Solver :
 
     def setup(self) :
         try:
+            if self.disabled == 1:
+                print("Welcome, what would you like solved today?\n\n",
+                      "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 0. Exit")
+                self.menu()
+
             with open('settings.txt','r') as file:  # opens file for reading
                 self.filefor = file.read()      # reads file
 
@@ -129,7 +150,7 @@ class Solver :
                     self.a2 = input("Hexadecimal number: ")
                     self.DecimalSolve()
                 except :
-                    print("Hexadecimal is unavalible...")
+                    print("Hexadecimal is unavailable...")
                     self.menu()
             elif self.pick == 3 :
                 try :
@@ -139,7 +160,11 @@ class Solver :
                     print("Binary is unavailable...")
                     self.menu()
             elif self.pick == 9 :
-                self.Options()
+                if self.disabled == 1:
+                    print("I can't find your setting.txt file to save settings...\n")
+                    self.menu()
+                else:
+                    self.Options()
             elif self.pick == 0 :
                 self.Exit()
             else :
@@ -231,6 +256,10 @@ class Solver :
         if self.answer == 'y':
             print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal"
                   "\n 3. Binary\n 9. Options\n 0. Exit")
+            if self.disabled == 0:
+                print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
+            elif self.disabled == 1:
+                print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 0. Exit")
             self.menu()
         elif self.answer == 'n':
             self.Exit()
@@ -241,7 +270,8 @@ class Solver :
 
     def Exit(self):
         print("\n\n\n\n\nThank you for using BHD Solver and goodbye...")
-        self.r.close()
+        if self.disabled == 0:
+            self.r.close()
         sleep(3)
 
 
