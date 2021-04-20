@@ -35,25 +35,25 @@ class Solver :
         self.disabled = 0   # if settings.txt cannot be found.
         self.filefor = []   # settings.txt document to this list
 
+        # menus
+        self.defmenu = []
+        self.menu1 = ['1. Decimal','2. Hexadecimal','3. Binary','9. Options','0. Exit']
+        self.menu2 = ['1. Decimal','2. Hexadecimal','3. Binary',
+                      '8. Create settings.txt file','9. Temporary settings','0. Exit']
+
+        # exit
+        self.ForceExit = 0
 
         # open to settings file to save settings
         try :
             self.r = open('settings.txt', 'r')  # reads settings
+            self.defmenu = self.menu1
+            self.summonmenu()
         except FileNotFoundError :
-            print("\'settings.txt\' file wasn't found with the py program...\nDid you want to create"
-                  " a new document? [y or n]")
-            i = input(">")
-            if i == "y":
-                open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
-                self.r = open('settings.txt','r')   # opens and reads a blank settings page
-            else:
-                print("\n! - Didn't create \'settings.txt\'. Settings will be disabled,")
-                sleep(2)
-                self.disabled = 1
-
-        if self.disabled == 0:
-            print("Welcome, what would you like solved today?\n\n",
-                  "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
+            print("\'settings.txt\' file wasn't found with the py program...\n"
+                  "Create a new document by using option #8 while in the menu!\n\n")
+            self.defmenu = self.menu2
+            self.disabled = 1
 
         # setup if and for loops, will be tested later
         # self.ifstripped = [self.strip if "0=1" in self.filefor == 1 else 0]
@@ -63,8 +63,7 @@ class Solver :
     def setup(self) :
         try:
             if self.disabled == 1:
-                print("Welcome, what would you like solved today?\n\n",
-                      "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 0. Exit")
+                self.summonmenu()
                 self.menu()
 
             with open('settings.txt','r') as file:  # opens file for reading
@@ -80,15 +79,21 @@ class Solver :
             else :
                 self.binary255 = 0
 
-
+            if self.ForceExit == 1:
+                self.Exit()
             self.r.close()
             self.menu()
         except:
-            print("Resulting to default settings. settings.txt failed to be created.")
-            self.menu()
+            self.Exit()
+
+    def summonmenu(self):
+        print("What would you like to solve today?")
+        for i in self.defmenu:
+            print(i)
 
     def Options(self) :
-        print("\n\nAnything you want changed?\n(Be sure to exit to save your settings)\n\n")
+        if self.disabled == 0:
+            print("\n\nAnything you want changed?\n(Be sure to exit to save your settings)\n\n")
         if self.strip == 0 :
             print("1. Turn striping on (0X, 0b)")
         else :
@@ -114,26 +119,37 @@ class Solver :
                     self.binary255 = 1
                 self.Options()
             elif inp == 0 :
-                self.w = open('settings.txt', 'w')  # writes settings
-                self.am = open('settings.txt', 'a')  # appends settings
-                if self.strip == 1 :
-                    self.w.write("0=1 ")
-                elif self.strip == 0 :
-                    self.w.write('0=0 ')
-                if self.binary255 == 1 :
-                    self.am.write("1=1")
-                elif self.binary255 == 0 :
-                    self.am.write('1=0')
-                    self.w.close()
-                    self.am.close()
-                print("Welcome, what would you like solved today?\n\n",
-                      "1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
+                if self.disabled == 0:
+                    self.w = open('settings.txt', 'w')  # writes settings
+                    self.am = open('settings.txt', 'a')  # appends settings
+                    if self.strip == 1 :
+                        self.w.write("0=1 ")
+                    elif self.strip == 0 :
+                        self.w.write('0=0 ')
+                    if self.binary255 == 1 :
+                        self.am.write("1=1")
+                    elif self.binary255 == 0 :
+                        self.am.write('1=0')
+                        self.w.close()
+                        self.am.close()
+                self.summonmenu()
                 self.menu()
             else :
                 print("Put in a correct number please"), self.Options()
         except :
             print("This only accepts numbers")
             self.Options()
+
+    def CreateTxt(self):
+        if self.disabled == 1:
+            print("A text file was created in the ram. Please exit the program to save and make the file.")
+            open('settings.txt', 'x')  # creates settings.txt file if doesn't exist
+            self.r = open('settings.txt', 'rt')  # opens and reads a blank settings page
+            self.menu()
+        elif self.disabled == 0:
+            print("\n:O There's already a settings file. How are you in here, and what are you doing in here????\n")
+            sleep(3)
+            self.menu()
 
     def menu(self) :
         try :
@@ -159,10 +175,16 @@ class Solver :
                 except :
                     print("Binary is unavailable...")
                     self.menu()
+            elif self.pick == 8:
+                try:
+                    self.CreateTxt()
+                except:
+                    print("There was an error when creating settings file")
+                    self.menu()
             elif self.pick == 9 :
                 if self.disabled == 1:
-                    print("I can't find your setting.txt file to save settings...\n")
-                    self.menu()
+                    print("These settings won't be saved, until you make a new file...\n")
+                    self.Options()
                 else:
                     self.Options()
             elif self.pick == 0 :
@@ -254,12 +276,7 @@ class Solver :
         #     print("[1.(y) or 2.(n)]")
         self.answer = input(">")
         if self.answer == 'y':
-            print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal"
-                  "\n 3. Binary\n 9. Options\n 0. Exit")
-            if self.disabled == 0:
-                print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 9. Options\n 0. Exit")
-            elif self.disabled == 1:
-                print("\n\nHere's the delicious menu again \n 1. Decimal\n 2. Hexadecimal\n 3. Binary\n 0. Exit")
+            self.summonmenu()
             self.menu()
         elif self.answer == 'n':
             self.Exit()
@@ -269,10 +286,14 @@ class Solver :
             self.Continue()
 
     def Exit(self):
-        print("\n\n\n\n\nThank you for using BHD Solver and goodbye...")
-        if self.disabled == 0:
-            self.r.close()
-        sleep(3)
+        if self.ForceExit == 0:
+            print("\n\n\n\n\nThank you for using BHD Solver and goodbye...")
+            if self.disabled == 0:
+                self.r.close()
+            sleep(2)
+            self.ForceExit = 1
+        elif self.ForceExit == 1:
+            pass
 
 
 S = Solver()
