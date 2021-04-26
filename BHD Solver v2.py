@@ -286,14 +286,15 @@ class Solver :
             self.Continue()
 
     def Exit(self):
-        if self.ForceExit == 0:
+        if self.ForceExit == 1:
+            print("Exiting...\n(If the application stays open, use option # 0 again. Thanks.)")
+        elif self.ForceExit == 0:
             print("\n\n\n\n\nThank you for using BHD Solver and goodbye...")
             if self.disabled == 0:
-                self.r.close()
+              self.r.close()
             sleep(2)
             self.ForceExit = 1
-        elif self.ForceExit == 1:
-            pass
+            self.Die()
 
 
 S = Solver()
