@@ -294,7 +294,6 @@ class Solver :
               self.r.close()
             sleep(2)
             self.ForceExit = 1
-            self.Die()
 
 
 S = Solver()
