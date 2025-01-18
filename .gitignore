@@ -114,3 +114,6 @@ dmypy.json
 .pyre/
 
 .vscode
+
+# Do not commit the settings files that is made with this program!
+.settings

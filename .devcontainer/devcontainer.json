@@ -1,0 +1,27 @@
+{
+	"name": "Python 3 BDH-Solver",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/python:dev-3.12-bookworm",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "sudo apt update && sudo apt upgrade -y",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode":	{
+			"extensions":	[
+				"ms-vscode.live-server"
+			]
+		}
+	},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// Using root becuase being a regular user doesn't have permissions to create or edit files.
+	"remoteUser": "root"
+}

@@ -1,9 +1,8 @@
-
 import os
 import sys
 from time import sleep
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), './functions')))
-from filemanipulation import fileStartUp, readSettings, saveSettings
+from filemanipulation import fileStartUp, saveSettings
 from settings import toggleStriping, toggleBinary255
 from operations import solveForDecimal, solveForBinary, solveForHexadecimal, formatNumbers
 
@@ -12,8 +11,13 @@ from operations import solveForDecimal, solveForBinary, solveForHexadecimal, for
 
 def startup():
     # Global variables
-    global stripingValue, binary255Value 
-    stripingValue, binary255Value = fileStartUp()
+    global stripingValue, binary255Value
+    try:
+        stripingValue, binary255Value = fileStartUp()
+    # My dev Container encountered this error
+    except PermissionError:
+        stripingValue, binary255Value = 0, 0
+        print("! - The .settings files cannot be created due to permission issues...\nYou won't be able to save your settings for your next session!\n")
 
 
 def startMenu():

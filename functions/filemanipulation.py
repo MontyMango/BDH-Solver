@@ -36,15 +36,26 @@ def saveSettings(stripSetting, binary255Setting):
     stripped = convertIntoDigit(stripSetting)
     binary255 = convertIntoDigit(binary255Setting)
 
-    fileWrite = open(SETTINGS_FILE_PATH, 'w')       # Used for adding the first setting
-    fileAppend = open(SETTINGS_FILE_PATH, 'a')      # Used for adding the rest of the settnigs
+    try:
+        fileWrite = open(SETTINGS_FILE_PATH, 'w')       # Used for adding the first setting
+        fileAppend = open(SETTINGS_FILE_PATH, 'a')      # Used for adding the rest of the settnigs
 
-    # Stripping settings
-    fileWrite.write("0=" + str(stripped))
+        # Stripping settings
+        fileWrite.write("0=" + str(stripped))
 
-    # Binary 255 settings
-    fileAppend.write(" 1=" + str(binary255))
+        # Binary 255 settings
+        fileAppend.write(" 1=" + str(binary255))
 
-    fileWrite.close()
-    fileAppend.close()
+        fileWrite.close()
+        fileAppend.close()
+
+    except FileNotFoundError:
+        print("\n! - The .settings file has been moved or deleted! Your settings has not been saved to the .settings file.")
+
+    except PermissionError:
+        print("\n! - You do not any permissions to save to the file! Your settings have not been saved to the .settings file.\n")
+        
+    except:
+        print("\n! - An issue has occurred during saving! Your settings have not been saved to the .settings file.\n")
+
     return True
